@@ -1,8 +1,9 @@
+import './styles/teachers-dashboard.css'
 import React from 'react'
-import Link from 'next/link'
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
+import { Link } from 'react-router-dom'
+import { Button } from "../components/ui/button"
+import { Card, CardContent, CardHeader, CardTitle } from "../components/ui/card"
+import { Input } from "../components/ui/input"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -10,9 +11,9 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+} from "../components/ui/dropdown-menu"
+import { Avatar, AvatarFallback, AvatarImage } from "../components/ui/avatar"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "../components/ui/tabs"
 import { BookOpen, Users, Video, FileText, BarChart, Bell, Search, Plus, Settings, LogOut } from "lucide-react"
 
 export default function TeacherDashboard() {

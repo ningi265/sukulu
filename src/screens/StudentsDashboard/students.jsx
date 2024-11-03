@@ -1,3 +1,4 @@
+import './student-dashboard.css'
 import React, { useState } from 'react'
 import { 
   BookOpen, 
@@ -12,7 +13,7 @@ import {
   ChevronDown,
   LogOut
 } from 'lucide-react'
-import Link from 'next/link'
+import { Link } from 'react-router-dom'
 
 // Mock data for demonstration purposes
 const courses = [

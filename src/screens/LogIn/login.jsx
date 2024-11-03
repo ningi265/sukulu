@@ -1,11 +1,11 @@
+import './LogInPage.css'
 import React from 'react'
 import { Link } from 'react-router-dom'; // For web apps
-import { Button } from "../components/ui/button"
-import { Input } from "../components/ui/input"
-import { Label } from "../components/ui/label"
-import { Separator } from "../components/ui/separator"
+import { Button } from "../../components/ui/button"
+import { Input } from "../../components/ui/input"
+import { Label } from "../../components/ui/label"
+import { Separator } from "../../components/ui/separator"
 import { BookOpen, Mail, Lock, ArrowRight } from "lucide-react"
-import '../screens/styles/globals.css';
 
 
 
