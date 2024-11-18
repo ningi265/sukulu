@@ -1,0 +1,281 @@
+/* General Styles */
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f3f4f6;
+  }
+  
+  a {
+    text-decoration: none;
+  }
+  
+  button {
+    cursor: pointer;
+    outline: none;
+  }
+  
+  /* Gradient Background for the Full Page */
+  .bg-gradient-to-br {
+    background: linear-gradient(to bottom right, rgba(59, 130, 246, 0.1), rgba(255, 255, 255, 1), rgba(59, 130, 246, 0.1));
+  }
+  
+  /* Flex Container for Centering Content */
+  .flex {
+    display: flex;
+  }
+  
+  .flex-1 {
+    flex: 1;
+  }
+  
+  .flex-col {
+    flex-direction: column;
+  }
+  
+  .justify-center {
+    justify-content: center;
+  }
+  
+  .px-4 {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+  
+  .sm\:px-6 {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+  
+  .lg\:px-20 {
+    padding-left: 5rem;
+    padding-right: 5rem;
+  }
+  
+  .lg\:w-96 {
+    width: 24rem;
+  }
+  
+  .xl\:px-24 {
+    padding-left: 6rem;
+    padding-right: 6rem;
+  }
+  
+  /* Form Container */
+  .mx-auto {
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+  .w-full {
+    width: 100%;
+  }
+  
+  .max-w-sm {
+    max-width: 24rem;
+  }
+  
+  .lg\:w-96 {
+    width: 24rem;
+  }
+  
+  /* Branding */
+  .text-3xl {
+    font-size: 1.875rem;
+  }
+  
+  .font-bold {
+    font-weight: 700;
+  }
+  
+  .text-primary {
+    color: #3b82f6;
+  }
+  
+  .transition-transform {
+    transition: transform 0.2s ease-in-out;
+  }
+  
+  .hover\:scale-105:hover {
+    transform: scale(1.05);
+  }
+  
+  /* Heading */
+  .text-center {
+    text-align: center;
+  }
+  
+  .text-3xl {
+    font-size: 1.875rem;
+  }
+  
+  .font-extrabold {
+    font-weight: 800;
+  }
+  
+  .text-gray-900 {
+    color: #111827;
+  }
+  
+  .mb-2 {
+    margin-bottom: 0.5rem;
+  }
+  
+  .text-sm {
+    font-size: 0.875rem;
+  }
+  
+  .text-muted-foreground {
+    color: #6b7280;
+  }
+  
+  /* Button */
+  .w-full {
+    width: 100%;
+  }
+  
+  .py-6 {
+    padding-top: 1.5rem;
+    padding-bottom: 1.5rem;
+  }
+  
+  .text-lg {
+    font-size: 1.125rem;
+  }
+  
+  .font-semibold {
+    font-weight: 600;
+  }
+  
+  .transition-all {
+    transition: all 0.2s ease-in-out;
+  }
+  .bg-primary {
+    background-color: #3b82f6;
+  }
+  
+  .text-white {
+    color: #ffffff;
+  }
+  
+  .border-gray-300 {
+    border-color: #d1d5db;
+  }
+  
+  .hover\:bg-primary\/5:hover {
+    background-color: rgba(59, 130, 246, 0.05);
+  }
+  
+  /* Icon for Google Sign Up */
+  .svg-inline--fa {
+    margin-right: 0.5rem;
+  }
+  
+  .svg-inline--fa .fa-path {
+    fill: #4285f4;
+  }
+  
+  /* Form Input Fields */
+  .space-y-6 {
+    margin-bottom: 1.5rem;
+  }
+  
+  .space-y-2 {
+    margin-bottom: 0.5rem;
+  }
+  
+  .relative {
+    position: relative;
+  }
+  
+  .input, .textarea {
+    padding-left: 2.5rem; /* Space for icons */
+    padding-right: 1rem;
+  }
+  
+  .pl-10 {
+    padding-left: 2.5rem;
+  }
+  
+  .py-6 {
+    padding-top: 1.5rem;
+    padding-bottom: 1.5rem;
+  }
+  
+  .text-sm {
+    font-size: 0.875rem;
+  }
+  
+  /* Checkbox */
+  .h-4 {
+    height: 1rem;
+  }
+  
+  .w-4 {
+    width: 1rem;
+  }
+  
+  .text-primary {
+    color: #3b82f6;
+  }
+  
+  .focus\:ring-primary:focus {
+    outline: 2px solid #3b82f6;
+  }
+  
+  .border-gray-300 {
+    border-color: #d1d5db;
+  }
+  
+  .ml-2 {
+    margin-left: 0.5rem;
+  }
+  
+  /* Separator */
+  .separator {
+    margin-top: 1.5rem;
+    margin-bottom: 1.5rem;
+    border-top: 1px solid #e5e7eb;
+  }
+  
+  /* Footer Text */
+  .text-center {
+    text-align: center;
+  }
+  
+  .text-muted-foreground {
+    color: #6b7280;
+  }
+  
+  /* Hidden on Mobile */
+  .hidden {
+    display: none;
+  }
+  
+  .lg\:block {
+    display: block;
+  }
+  
+  .relative {
+    position: relative;
+  }
+  
+  .w-0 {
+    width: 0;
+  }
+  
+  .flex-1 {
+    flex: 1;
+  }
+  
+  .object-cover {
+    object-fit: cover;
+  }
+  
+  .h-full {
+    height: 100%;
+  }
+  
+  .w-full {
+    width: 100%;
+  }
+  

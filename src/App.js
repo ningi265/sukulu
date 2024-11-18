@@ -2,9 +2,9 @@ import './App.css';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Component from './screens/Homepage/homepage';
 import LoginPage from './screens/LogIn/login';
-import SignUpPage from './screens/signup';
-import TeacherDashboard from './screens/teachers';
+import SignUpPage from './screens/SignUp/signup';
 import StudentDashboard from './screens/StudentsDashboard/students';
+import TeacherDashboard from './screens/TeachersDashboard/teachers';
 
 
 function App() {
@@ -13,8 +13,8 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Component />} />
-          <Route path="/teachers" element={<TeacherDashboard />} />
           <Route path="/students" element={<StudentDashboard />} />
+          <Route path="/teachers" element={<TeacherDashboard />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<SignUpPage />} />
         </Routes>

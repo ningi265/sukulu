@@ -1,50 +1,82 @@
-import './LogInPage.css'
-import React from 'react'
-import { Link } from 'react-router-dom'; // For web apps
-import { Button } from "../../components/ui/button"
-import { Input } from "../../components/ui/input"
-import { Label } from "../../components/ui/label"
-import { Separator } from "../../components/ui/separator"
-import { BookOpen, Mail, Lock, ArrowRight } from "lucide-react"
-
-
+import React, { useState } from 'react';
+import axios from 'axios';
+import { Link, useNavigate } from 'react-router-dom';
+import { Button } from "../../components/ui/button";
+import { Input } from "../../components/ui/input";
+import { Separator } from "../../components/ui/separator";
+import { Label } from "../../components/ui/label";
+import { BookOpen, Mail, Lock } from "lucide-react";
 
 export default function LoginPage() {
-  const handleEmailLogin = (e) => {
-    e.preventDefault()
-    // TODO: Implement email/password login logic
-    console.log('Email login attempted')
-  }
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [rememberMe, setRememberMe] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState('');
+  const [isError, setIsError] = useState(false); // Track if there’s an error
 
-  const handleGoogleLogin = () => {
-    // TODO: Implement Google OAuth login logic
-    console.log('Google login attempted')
-  }
+  const navigate = useNavigate();
+
+  const handleEmailLogin = async (e) => {
+    e.preventDefault();
+    setIsLoading(true);
+    setError('');
+    setIsError(false);
+
+    try {
+      const response = await axios.post('http://localhost:4000/api/users/login', { email, password });
+      const { token, user } = response.data;
+
+      if (rememberMe) {
+        localStorage.setItem('token', token);
+      } else {
+        sessionStorage.setItem('token', token);
+      }
+
+      // Store user role to handle redirection
+      localStorage.setItem('userRole', user.role);
+
+      // Navigate to the appropriate dashboard based on the user role
+      if (user.role === 'teacher') {
+        navigate('/teachers');
+      } else {
+        navigate('/students');
+      }
+    } catch (err) {
+      const errorMessage = err.response?.data?.message || 'Invalid credentials';
+      setError(errorMessage);
+      setIsError(true); // Trigger error styling
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleGoogleSignUp = async () => {
+    // Handle Google Sign-up here
+  };
 
   return (
-    <div className="flex min-h-screen bg-gradient-to-br from-primary/10 via-background to-primary/10">
-      <div className="flex flex-1 flex-col justify-center py-12 px-4 sm:px-6 lg:flex-none lg:px-20 xl:px-24">
-        <div className="mx-auto w-full max-w-sm lg:w-96">
-          <div className="flex justify-center mb-8">
-            <Link href="/" className="flex items-center text-primary transition-transform hover:scale-105">
+    <div className="login-page">
+      <div className="containerl">
+        <div className="cardl">
+          <div className="headerl">
+            <Link to="/" className="titlel">
               <BookOpen className="h-10 w-10 mr-2" />
               <span className="text-3xl font-bold">MSCE PrepMaster</span>
             </Link>
           </div>
           <div className="text-center mb-8">
             <h2 className="text-3xl font-extrabold text-gray-900 mb-2">Welcome back</h2>
-            <p className="text-sm text-muted-foreground">
-              Sign in to continue your MSCE preparation journey
-            </p>
+            <p className="label">Sign in to continue your MSCE preparation journey</p>
           </div>
 
-          <div className="space-y-6">
+          <div className="login-buttons">
             <Button
               variant="outline"
-              className="w-full flex items-center justify-center py-6 transition-colors hover:bg-primary/5"
-              onClick={handleGoogleLogin}
+              className="google-button"
+              onClick={handleGoogleSignUp}
             >
-              <svg className="h-5 w-5 mr-2" viewBox="0 0 24 24">
+              <svg className="google-icon" viewBox="0 0 24 24">
                 <path
                   d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
                   fill="#4285F4"
@@ -63,95 +95,89 @@ export default function LoginPage() {
                 />
                 <path d="M1 1h22v22H1z" fill="none" />
               </svg>
-              Sign in with Google
+              Sign up with Google
             </Button>
-
-            <div className="relative">
-              <Separator className="my-8" />
-              <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-background px-2 text-sm text-muted-foreground">
-                Or continue with
-              </span>
+            <div className="divider">
+              <Separator className="separator" />
+              <span className="separator-text">Or sign in with email</span>
             </div>
 
-            <form className="space-y-6" onSubmit={handleEmailLogin}>
-              <div className="space-y-2">
-                <Label htmlFor="email" className="text-sm font-medium text-gray-700">
-                  Email address
-                </Label>
-                <div className="relative">
+            {/* Login Form */}
+            <form className="form" onSubmit={handleEmailLogin}>
+              <div>
+                <Label htmlFor="email" className="label">Email address</Label>
+                <div className="input-group">
                   <Input
                     id="email"
                     name="email"
                     type="email"
-                    autoComplete="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
                     required
-                    className="pl-10 py-6"
+                    className={`input ${isError ? 'error-border' : ''}`}
                     placeholder="Enter your email"
                   />
-                  <Mail className="h-5 w-5 text-gray-400 absolute left-3 top-1/2 transform -translate-y-1/2" />
+                  <Mail className="input-icon" />
                 </div>
               </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="password" className="text-sm font-medium text-gray-700">
-                  Password
-                </Label>
-                <div className="relative">
+              <div className="mt-4">
+                <Label htmlFor="password" className="label">Password</Label>
+                <div className="input-group">
+                  <Lock className="input-icon" />
                   <Input
                     id="password"
                     name="password"
                     type="password"
-                    autoComplete="current-password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
                     required
-                    className="pl-10 py-6"
+                    className={`input ${isError ? 'error-border' : ''}`}
                     placeholder="Enter your password"
                   />
-                  <Lock className="h-5 w-5 text-gray-400 absolute left-3 top-1/2 transform -translate-y-1/2" />
                 </div>
+                {isError && (
+                  <p className="text-red-500 text-sm mt-1">{error}</p>
+                )}
               </div>
 
-              <div className="flex items-center justify-between">
-                <div className="flex items-center">
+              {/* Remember Me and Forgot Password Links */}
+              <div className="flex items-center justify-between mt-4">
+                <div className="remember-me-container flex items-center">
                   <input
                     id="remember-me"
                     name="remember-me"
                     type="checkbox"
-                    className="h-4 w-4 text-primary focus:ring-primary border-gray-300 rounded"
+                    checked={rememberMe}
+                    onChange={(e) => setRememberMe(e.target.checked)}
+                    className="remember-me-checkbox"
                   />
-                  <Label htmlFor="remember-me" className="ml-2 block text-sm text-gray-900">
+                  <Label htmlFor="remember-me" className="label ml-2">
                     Remember me
                   </Label>
                 </div>
 
-                <div className="text-sm">
-                  <Link href="/forgot-password" className="font-medium text-primary hover:text-primary/80 transition-colors">
-                    Forgot your password?
-                  </Link>
-                </div>
+                <Link to="/forgot-password" className="label text-blue-600 hover:text-blue-800 transition duration-200">
+                  Forgot your password?
+                </Link>
               </div>
 
-              <Button type="submit" className="w-full py-6 text-lg font-semibold transition-all hover:scale-[1.02]">
-                Sign in
-                <ArrowRight className="ml-2 h-5 w-5" />
+              {/* Submit Button */}
+              <Button type="submit" className="button mt-6 w-full" disabled={isLoading}>
+                {isLoading ? 'Logging in...' : 'Sign in'}
               </Button>
             </form>
 
-            <p className="text-center text-sm text-muted-foreground">
-              Don't have an account?{' '}
-              <Link href="/signup" className="font-medium text-primary hover:text-primary/80 transition-colors">
-                Sign up
+            {/* Sign-Up Prompt */}
+            <p className="signin-prompt text-center mt-4">
+              Don’t have an account?{' '}
+              <Link to="/signup" className="signin-link text-blue-600 hover:text-blue-800 transition duration-200">
+                Sign Up
               </Link>
             </p>
           </div>
         </div>
       </div>
-      <div className="hidden lg:block relative w-0 flex-1">
-        <img
-          className="absolute inset-0 h-full w-full object-cover"
-          src="/placeholder.svg"
-          alt="Students studying"
-        />
-      </div>
     </div>
-  )
+  );
 }

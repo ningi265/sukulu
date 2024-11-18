@@ -1,0 +1,297 @@
+
+/* Aside Navigation */
+.aside {
+  width: 240px;
+  background-color: #f9fafb;
+  height: 100vh;
+  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+  padding-top: 1rem;
+}
+
+.aside nav {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.aside a {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: #333;
+  padding: 0.75rem 1rem;
+  border-radius: var(--button-radius);
+  transition: background-color var(--transition-speed), padding-left var(--transition-speed);
+  width: 100%;
+  font-size: 1rem;
+}
+
+/* Hover Effect */
+.aside a:hover {
+  background-color: var(--hover-bg);
+  padding-left: 1.25rem; /* Adds subtle effect when hovering */
+}
+
+.aside a span {
+  flex: 1;
+  text-align: left;
+}
+
+/* Main Content */
+.maint {
+  margin-left: 240px;
+  padding: 2rem;
+  background-color: var(--background-color);
+  min-height: 100vh;
+}
+
+
+/* Header */
+.headert {
+  background: rgb(255, 255, 255);
+  padding: 1rem 2rem;
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  justify-content: space-between; /* Separate left and right sections */
+  align-items: center;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  width: 100%; 
+  transition: background-color var(--transition-speed), box-shadow var(--transition-speed);
+}
+
+/* Header Content Layout */
+.header-content {
+  display: flex;
+  justify-content: space-between; /* Spread title and action items */
+  align-items: center;
+  width: 100%;
+  max-width: 1200px; /* Constrain content width */
+  margin: 0 auto; /* Center content horizontally */
+}
+
+/* Header Left Section */
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 1rem; /* Add spacing between items */
+}
+
+.header-title {
+  margin-left: 0;
+  text-align: left; /* Ensure alignment to the left */
+  color: var(--text-color);
+}
+/* Notifications Button */
+.notification-bell {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.notification-bell:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  transform: scale(1.05);
+}
+
+.notification-bell svg {
+  color: var(--icon-color);
+  transition: color 0.2s ease;
+}
+
+.notification-bell:hover svg {
+  color: var(--primary-color);
+}
+
+/* Dropdown Menu */
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 0; /* Align dropdown menu to the start */
+  background: #fff;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  box-shadow: var(--shadow-lg);
+  z-index: 1500;
+  opacity: 0;
+  transform: scale(0.95);
+  pointer-events: none;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.dropdown-menu[aria-expanded="true"] {
+  opacity: 1;
+  transform: scale(1);
+  pointer-events: auto;
+}
+
+.dropdown-menu-label {
+  padding: 1rem;
+  border-bottom: 1px solid var(--border-color);
+  text-align: left;
+  background: var(--hover-bg);
+}
+
+.dropdown-menu-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  font-size: 0.9rem;
+  color: var(--text-color);
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.dropdown-menu-item:hover {
+  background: var(--hover-bg);
+  color: var(--primary-color);
+}
+
+.dropdown-menu-item svg {
+  width: 1rem;
+  height: 1rem;
+  color: var(--icon-color);
+}
+
+.dropdown-menu-item:hover svg {
+  color: var(--primary-color);
+}
+
+/* Avatar */
+.avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  overflow: hidden;
+  background: var(--hover-bg);
+  transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+.avatar:hover {
+  transform: scale(1.1);
+}
+/* Card Styling */
+.card {
+  background: #fff;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  box-shadow: var(--shadow-sm);
+  padding: 1.5rem;
+  transition: transform var(--transition-speed), box-shadow var(--transition-speed);
+}
+
+.card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-lg);
+}
+
+.card .text-muted-foreground {
+  color: var(--muted-text-color);
+}
+
+.card-title {
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+/* Buttons */
+button {
+  background-color: var(--primary-color);
+  color: #fff;
+  border: none;
+  border-radius: var(--button-radius);
+  padding: 0.6rem 1.2rem;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.2s ease, transform var(--transition-speed);
+}
+
+button:hover {
+  background-color: var(--secondary-color);
+  transform: translateY(-2px);
+}
+
+/* Tabs Styling */
+.tabs-trigger {
+  padding: 0.5rem 1rem;
+  border-radius: var(--button-radius);
+  background: var(--hover-bg);
+}
+
+.tabs-trigger[aria-selected="true"] {
+  background: var(--primary-color);
+  color: white;
+}
+
+/* Input Fields */
+input {
+  border: 1px solid var(--border-color);
+  border-radius: var(--button-radius);
+  padding: 0.75rem;
+  width: 100%;
+  font-size: 1rem;
+  transition: border-color var(--transition-speed), box-shadow var(--transition-speed);
+}
+
+input:focus {
+  border-color: var(--primary-color);
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.2);
+}
+
+/* Table Styling */
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1.5rem;
+}
+
+.table th,
+.table td {
+  border: 1px solid var(--border-color);
+  padding: 1rem;
+}
+
+.table th {
+  background: var(--hover-bg);
+  text-align: left;
+  font-weight: 600;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .aside {
+    width: 200px;
+  }
+
+  main {
+    margin-left: 200px;
+  }
+
+  header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .header-actions {
+    flex-direction: column;
+  }
+}

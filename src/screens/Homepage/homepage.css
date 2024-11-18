@@ -1,7 +1,7 @@
 /* Base styles */
 :root {
-  --primary-color: #3b82f6;
-  --primary-hover-color: #2563eb;
+  --primary-color: black;
+  --primary-hover-color: #031e58;
   --background-color: #ffffff;
   --section-background-color: #f9fafb;
   --text-color: #1f2937;
@@ -33,7 +33,7 @@ body {
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 15px;
-}
+} 
 
 /* Header styles */
 header {
@@ -114,6 +114,7 @@ nav {
   display: flex;
   gap: 10px;
   margin-left: 16px;
+  border-radius: 10px;
 }
 
 .btn {
@@ -157,14 +158,54 @@ nav {
   cursor: pointer;
 }
 
+/* Main */
+.page{
+  background-color: var(--background-color);
+}
+
 /* Hero section */
 .hero {
-  background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%); /* Gradient background */
   color: var(--text-color);
+  border-radius: 10px;
   padding: 80px 0;
   text-align: center;
-  border-radius: 20px; /* Round corners */
-  box-shadow: 0 10px 30px var(--shadow-color); /* Soft shadow */
+  align-items: center;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-image: url('../../../public/assets/istockphoto-1264296727-1024x1024.jpg');
+}
+
+.hero-content{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-direction: column;
+  
+}
+.hero-btn{
+  color: black;
+  text-decoration: none;
+  display: inline-block;
+  padding: 10px 20px;
+  border-radius: 10px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--background-color var(--transition-speed),color var(--transition-speed), transform var()--transition-speed);
+
+
+}
+
+.hero-btn1{
+  color: aliceblue;
+  text-decoration: none;
+  background-color: rgb(3, 15, 11);
+  display: inline-block;
+  padding: 10px 20px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: var(--background-color var(--transition-speed),color var(--transition-speed), transform var()--transition-speed);
 }
 
 .hero h1 {
@@ -183,8 +224,9 @@ nav {
 
 /* Sections */
 .section {
-  background-color: var(--section-background-color);
-  padding: 80px 0;
+  background-color: var(--background-color);
+  padding: 120px 0;
+  margin-bottom: 100px;
   box-shadow: 0 4px 20px var(--shadow-color); /* Soft shadow for sections */
   border-radius: 20px; /* Round corners */
 }
@@ -198,6 +240,7 @@ nav {
 
 /* Features section */
 .feature-grid {
+  margin-bottom: 60px;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 32px;
@@ -220,7 +263,7 @@ nav {
   width: 60px;
   height: 60px;
   margin-bottom: 16px;
-  color: var(--primary-color);
+  color: black;
 }
 
 .feature-title {
@@ -235,7 +278,7 @@ nav {
 
 /* Dashboard section */
 .dashboard {
-  background-color: var(--background-color);
+  margin-bottom: 80px;
 }
 
 .dashboard-grid {
@@ -287,6 +330,9 @@ nav {
 }
 
 /* Tools section */
+.tools {
+  margin-bottom: 80px;
+}
 .tools-content {
   display: flex;
   align-items: center;
@@ -333,12 +379,13 @@ nav {
   width: 24px;
   height: 24px;
   margin-right: 12px;
-  color: var(--primary-color);
+  color: black;
 }
 
 /* Community section */
 .community {
-  background-color: var(--section-background-color);
+  margin-bottom: 80px;
+ 
 }
 
 .community-grid {
@@ -372,12 +419,10 @@ nav {
 
 /* CTA section */
 .cta {
-  background-color: var(--primary-color);
-  color: #fff;
   padding: 40px 0;
   text-align: center;
-  border-radius: 15px;
-  box-shadow: 0 4px 10px var(--shadow-color);
+  background-image: url('../../../public/assets/istockphoto-1347520142-1024x1024.webp');
+
 }
 
 .cta-title {
@@ -391,18 +436,48 @@ nav {
   margin-bottom: 24px;
 }
 
-/* Footer styles */
-footer {
+/* Footer container styling */
+.footer {
   background-color: var(--background-color);
-  border-top: 1px solid var(--border-color);
-  padding: 20px 0;
+  color: #fff;
+  padding: 10px 20px;     /* Reduced vertical padding for lower height */
   text-align: center;
+  font-family: Arial, sans-serif;
 }
 
-.footer-text {
-  font-size: 0.875rem;
-  color: var(--text-muted);
+/* Footer navigation container */
+.footer-nav {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;               /* Reduced gap for closer spacing */
 }
+
+/* Footer text styling */
+.footer-text {
+  font-size: 13px;        /* Slightly smaller font */
+  color: #aaa;
+  margin: 0;
+}
+
+/* Links container styling */
+.footer-links {
+  display: flex;
+  gap: 12px;              /* Reduced space between each link */
+}
+
+/* Link styling */
+.footer-links a {
+  color: black;
+  text-decoration: none;
+  font-size: 13px;        /* Slightly smaller font for links */
+  transition: color 0.3s ease;
+}
+
+.footer-links a:hover {
+  color: #1d1379;
+}
+
 
 /* Responsive design */
 @media (max-width: 1024px) {
