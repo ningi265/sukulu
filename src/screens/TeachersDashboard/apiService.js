@@ -8,12 +8,13 @@ const apiClient = axios.create({
   },
 });
 
-// Add an Axios request interceptor to include the token in each request
+
+// Add an Axios response interceptor to handle 401 errors (Unauthorized)
 apiClient.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem('token'); // Get the token from localStorage
-   // Debugging - Check if the token is being retrieved correctly
+    const token = sessionStorage.getItem('token'); // or sessionStorage.getItem('token')
     if (token) {
+      console.log('Token being sent:', token);  // Log the token being added to headers
       config.headers.Authorization = `Bearer ${token}`; // Attach token to request headers
     }
     return config;
@@ -23,18 +24,6 @@ apiClient.interceptors.request.use(
   }
 );
 
-// Add an Axios response interceptor to handle 401 errors (Unauthorized)
-apiClient.interceptors.response.use(
-  response => response,
-  (error) => {
-    if (error.response && error.response.status === 401) {
-      // Token expired or invalid, remove token and redirect to login
-      localStorage.removeItem('token');
-      window.location.href = '/login'; // Redirect to login page
-    }
-    return Promise.reject(error);
-  }
-);
 
 // API calls
 export const getDashboardStats = () => apiClient.get('/stats');
