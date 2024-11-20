@@ -1,7 +1,7 @@
 'use client'
-
+import './courses.css';
 import React, { useState } from 'react'
-import { useRouter } from 'next/router'
+import { useNavigate } from 'react-router-dom'
 import { Button } from "../../components/ui/button"
 import { Input } from "../../components/ui/input"
 import { Textarea } from "../../components/ui/textarea"
@@ -10,15 +10,18 @@ import { Card, CardContent, CardHeader, CardTitle } from "../../components/ui/ca
 import { BookOpen, ArrowLeft } from 'lucide-react'
 
 export default function CreateCourse() {
-  const router = useRouter()
+  const navigate = useNavigate()
   const [courseData, setCourseData] = useState({
     title: '',
     description: '',
     duration: '',
-    maxStudents: '',
+    content: '',
   })
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [error, setError] = useState(null)
+
+  const handleInputChange = (e) => {
     const { name, value } = e.target
     setCourseData(prevData => ({
       ...prevData,
@@ -26,17 +29,53 @@ export default function CreateCourse() {
     }))
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    // Here you would typically send the courseData to your API
-    console.log('Course data submitted:', courseData)
-    // After successful submission, redirect back to the dashboard
-    router.push('/teacher-dashboard')
+  const validateForm = () => {
+    // Simple form validation
+    const { title, description, duration, content } = courseData
+    if (!title || !description || !duration || !content) {
+      setError('All fields are required.')
+      return false
+    }
+    setError(null)
+    return true
   }
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    
+    if (!validateForm()) return;
+  
+    setIsSubmitting(true);
+  
+    try {
+      const response = await fetch('http://localhost:4000/api/courses/', { // Adjust the endpoint as needed
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${sessionStorage.getItem('token')}`, // Assuming JWT authentication
+        },
+        body: JSON.stringify(courseData),
+      });
+  
+      if (!response.ok) {
+        throw new Error('Failed to create course');
+      }
+  
+      const data = await response.json();
+      console.log('Course created:', data);
+  
+      // Navigate to teacher dashboard
+      navigate('/teachers');
+    } catch (err) {
+      setError(err.message || 'Failed to create the course. Please try again later.');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   return (
     <div className="container mx-auto p-4">
-      <Button variant="ghost" onClick={() => router.push('/teacher-dashboard')} className="mb-4">
+      <Button variant="ghost" onClick={() => navigate('/teachers')} className="mb-4">
         <ArrowLeft className="mr-2 h-4 w-4" /> Back to Dashboard
       </Button>
       <Card className="max-w-2xl mx-auto">
@@ -48,6 +87,7 @@ export default function CreateCourse() {
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
+            {error && <div className="text-red-600">{error}</div>} {/* Display error message */}
             <div className="space-y-2">
               <Label htmlFor="title">Course Title</Label>
               <Input
@@ -80,21 +120,22 @@ export default function CreateCourse() {
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="maxStudents">Maximum Number of Students</Label>
-              <Input
-                id="maxStudents"
-                name="maxStudents"
-                type="number"
-                value={courseData.maxStudents}
+              <Label htmlFor="maxStudents">Resource</Label>
+              <Textarea
+                id="content"
+                name="content"
+                value={courseData.content}
                 onChange={handleInputChange}
                 required
               />
             </div>
             <div className="flex justify-end space-x-2">
-              <Button type="button" variant="outline" onClick={() => router.push('/teacher-dashboard')}>
+              <Button type="button" variant="outline" onClick={() => navigate('/teachers')}>
                 Cancel
               </Button>
-              <Button type="submit">Create Course</Button>
+              <Button type="submit" disabled={isSubmitting}>
+                {isSubmitting ? 'Creating Course...' : 'Create Course'}
+              </Button>
             </div>
           </form>
         </CardContent>

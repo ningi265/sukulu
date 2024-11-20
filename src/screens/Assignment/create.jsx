@@ -1,61 +1,122 @@
-
-import React, { useState } from 'react'
-import { useRouter } from 'next/router'
-import { Button } from "../../components/ui/button"
-import { Input } from "../../components/ui/input"
-import { Textarea } from "../../components/ui/textarea"
-import { Label } from "../../components/ui/label"
-import { Card, CardContent, CardHeader, CardTitle } from "../../components/ui/card"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../components/ui/select"
-import { FileText, ArrowLeft } from 'lucide-react'
+'use client'
+import '../Courses/courses.css';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { Button } from "../../components/ui/button";
+import { Input } from "../../components/ui/input";
+import { Textarea } from "../../components/ui/textarea";
+import { Label } from "../../components/ui/label";
+import { Card, CardContent, CardHeader, CardTitle } from "../../components/ui/card";
+import { Calendar, ArrowLeft } from 'lucide-react';
 
 export default function CreateAssignment() {
-  const router = useRouter()
+  const navigate = useNavigate();
   const [assignmentData, setAssignmentData] = useState({
     title: '',
     description: '',
-    course: '',
     dueDate: '',
-    maxScore: '',
-  })
+    courseId: '',
+  });
+  const [courses, setCourses] = useState([]);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState(null);
+  const [loadingCourses, setLoadingCourses] = useState(true);
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target
+  useEffect(() => {
+    const fetchCourses = async () => {
+      try {
+        const response = await fetch('http://localhost:4000/api/courses/teachers/courses', {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${sessionStorage.getItem('token')}`,
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to fetch courses');
+        }
+
+        const data = await response.json();
+        setCourses(data.courses || []);
+      } catch (err) {
+        setError('Failed to load courses. Please try again later.');
+      } finally {
+        setLoadingCourses(false);
+      }
+    };
+
+    fetchCourses();
+  }, []);
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
     setAssignmentData(prevData => ({
       ...prevData,
-      [name]: value
-    }))
-  }
+      [name]: value,
+    }));
+  };
 
-  const handleCourseSelect = (value: string) => {
-    setAssignmentData(prevData => ({
-      ...prevData,
-      course: value
-    }))
-  }
+  const validateForm = () => {
+    const { title, description, dueDate, courseId } = assignmentData;
+    if (!title || !description || !dueDate || !courseId) {
+      setError('All fields are required.');
+      return false;
+    }
+    setError(null);
+    return true;
+  };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    // Here you would typically send the assignmentData to your API
-    console.log('Assignment data submitted:', assignmentData)
-    // After successful submission, redirect back to the dashboard
-    router.push('/teacher-dashboard')
-  }
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (!validateForm()) return;
+
+    setIsSubmitting(true);
+
+    try {
+      const response = await fetch(`http://localhost:4000/api/courses/courses/${assignmentData.courseId}/assignments`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${sessionStorage.getItem('token')}`,
+        },
+        body: JSON.stringify({
+          title: assignmentData.title,
+          description: assignmentData.description,
+          dueDate: assignmentData.dueDate,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to create assignment');
+      }
+
+      const data = await response.json();
+      console.log('Assignment created:', data);
+
+      navigate('/teachers'); // Redirect after success
+    } catch (err) {
+      setError(err.message || 'Failed to create the assignment. Please try again later.');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   return (
     <div className="container mx-auto p-4">
-      <Button variant="ghost" onClick={() => router.push('/teacher-dashboard')} className="mb-4">
+      <Button variant="ghost" onClick={() => navigate('/teachers')} className="mb-4">
         <ArrowLeft className="mr-2 h-4 w-4" /> Back to Dashboard
       </Button>
       <Card className="max-w-2xl mx-auto">
         <CardHeader>
           <CardTitle className="text-2xl font-bold flex items-center">
-            <FileText className="mr-2 h-6 w-6" />
+            <Calendar className="mr-2 h-6 w-6" />
             Create New Assignment
           </CardTitle>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
+            {error && <div className="text-red-600">{error}</div>}
             <div className="space-y-2">
               <Label htmlFor="title">Assignment Title</Label>
               <Input
@@ -77,19 +138,6 @@ export default function CreateAssignment() {
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="course">Course</Label>
-              <Select onValueChange={handleCourseSelect} value={assignmentData.course}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select a course" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="course1">Course 1</SelectItem>
-                  <SelectItem value="course2">Course 2</SelectItem>
-                  <SelectItem value="course3">Course 3</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-            <div className="space-y-2">
               <Label htmlFor="dueDate">Due Date</Label>
               <Input
                 id="dueDate"
@@ -101,25 +149,42 @@ export default function CreateAssignment() {
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="maxScore">Maximum Score</Label>
-              <Input
-                id="maxScore"
-                name="maxScore"
-                type="number"
-                value={assignmentData.maxScore}
-                onChange={handleInputChange}
-                required
-              />
+              <Label htmlFor="courseId">Select Course</Label>
+              {loadingCourses ? (
+                <div>Loading courses...</div>
+              ) : (
+                <select
+                  id="courseId"
+                  name="courseId"
+                  value={assignmentData.courseId}
+                  onChange={handleInputChange}
+                  required
+                  className="block w-full border rounded p-2"
+                >
+                  <option value="">-- Select a Course --</option>
+                  {courses.length === 0 ? (
+                    <option disabled>No courses available</option>
+                  ) : (
+                    courses.map(course => (
+                      <option key={course._id} value={course._id}>
+                        {course.title}
+                      </option>
+                    ))
+                  )}
+                </select>
+              )}
             </div>
             <div className="flex justify-end space-x-2">
-              <Button type="button" variant="outline" onClick={() => router.push('/teacher-dashboard')}>
+              <Button type="button" variant="outline" onClick={() => navigate('/teachers')}>
                 Cancel
               </Button>
-              <Button type="submit">Create Assignment</Button>
+              <Button type="submit" disabled={isSubmitting}>
+                {isSubmitting ? 'Creating Assignment...' : 'Create Assignment'}
+              </Button>
             </div>
           </form>
         </CardContent>
       </Card>
     </div>
-  )
+  );
 }

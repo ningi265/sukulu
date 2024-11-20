@@ -66,7 +66,26 @@ export const CardContent = React.forwardRef(({ className = '', ...props }, ref) 
   );
 });
 
+
+export const CardDescription = React.forwardRef(({ className = '', ...props }, ref) => {
+  const descriptionStyles = {
+    fontSize: '0.875rem',
+    color: '#6b7280',
+    margin: '0.5rem 0 0',
+  };
+
+  return (
+    <p
+      ref={ref}
+      className={`ui-card-description ${className}`}
+      style={descriptionStyles}
+      {...props}
+    />
+  );
+});
+
 Card.displayName = 'Card';
 CardHeader.displayName = 'CardHeader';
 CardTitle.displayName = 'CardTitle';
 CardContent.displayName = 'CardContent';
+CardDescription.displayName = 'CardDescription';

@@ -1,0 +1,140 @@
+.notification-center {
+    max-width: 800px;
+    margin: 0 auto;
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .notification-header {
+    background-color: #3498db;
+    color: white;
+    padding: 20px;
+    text-align: center;
+  }
+  
+  .notification-header h1 {
+    margin: 0;
+    font-size: 24px;
+  }
+  
+  .notification-header p {
+    margin: 10px 0 0;
+    font-size: 14px;
+  }
+  
+  .notification-tabs {
+    display: flex;
+    background-color: #2980b9;
+  }
+  
+  .notification-tabs button {
+    flex: 1;
+    border: none;
+    background-color: transparent;
+    color: white;
+    padding: 10px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .notification-tabs button:hover {
+    background-color: #1c638e;
+  }
+  
+  .notification-tabs button.active {
+    background-color: #1c638e;
+    font-weight: bold;
+  }
+  
+  .notification-list {
+    padding: 20px;
+  }
+  
+  .notification-item {
+    display: flex;
+    align-items: flex-start;
+    background-color: white;
+    border-radius: 4px;
+    padding: 15px;
+    margin-bottom: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
+  
+  .notification-icon {
+    font-size: 24px;
+    margin-right: 15px;
+  }
+  
+  .notification-content {
+    flex: 1;
+  }
+  
+  .notification-content h2 {
+    margin: 0 0 5px;
+    font-size: 16px;
+  }
+  
+  .notification-content p {
+    margin: 0 0 5px;
+    font-size: 14px;
+    color: #666;
+  }
+  
+  .notification-content time {
+    font-size: 12px;
+    color: #999;
+  }
+  
+  .notification-badge {
+    font-size: 12px;
+    padding: 3px 8px;
+    border-radius: 12px;
+    text-transform: capitalize;
+  }
+  
+  .notification-item.request .notification-badge {
+    background-color: #3498db;
+    color: white;
+  }
+  
+  .notification-item.submission .notification-badge {
+    background-color: #2ecc71;
+    color: white;
+  }
+  
+  .notification-item.event .notification-badge {
+    background-color: #f1c40f;
+    color: white;
+  }
+  
+  .notification-item.announcement .notification-badge {
+    background-color: #9b59b6;
+    color: white;
+  }
+  
+  @media (max-width: 600px) {
+    .notification-tabs {
+      flex-wrap: wrap;
+    }
+  
+    .notification-tabs button {
+      flex-basis: 50%;
+    }
+  
+    .notification-item {
+      flex-direction: column;
+    }
+  
+    .notification-icon {
+      margin-bottom: 10px;
+    }
+  
+    .notification-badge {
+      align-self: flex-start;
+      margin-top: 10px;
+    }
+  }

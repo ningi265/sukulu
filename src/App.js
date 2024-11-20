@@ -7,6 +7,7 @@ import StudentDashboard from './screens/StudentsDashboard/students';
 import TeacherDashboard from './screens/TeachersDashboard/teachers';
 import CreateCourse from './screens/Courses/courses';
 import CreateAssignment from './screens/Assignment/create';
+import NotificationCenter from './screens/Notifications/notifications';
 
 
 function App() {
@@ -22,6 +23,7 @@ function App() {
           <Route path="/signup" element={<SignUpPage />} />
           <Route path="/course" element={<CreateCourse />} />
           <Route path="/assignment" element={<CreateAssignment />} />
+          <Route path="/notification" element={<NotificationCenter />} />
         </Routes>
       </BrowserRouter>
     </div> 

@@ -19,10 +19,10 @@ export default function Component() {
               Features
             </Link>
             <Link to="/teachers" className="text-sm font-medium hover:text-blue-600 transition-colors">
-              For Teachers
+              Teachers
             </Link>
             <Link to="/students" className="text-sm font-medium hover:text-blue-600 transition-colors">
-              For Students
+              Students
             </Link>
             <div className="auth-buttons">
             <Link to="/login" className='hero-btn1'>
@@ -48,10 +48,10 @@ export default function Component() {
                 Features
               </Link>
               <Link to="/teachers" className="text-sm font-medium hover:text-blue-600 transition-colors">
-                For Teachers
+                  Teachers
               </Link>
               <Link to="/students" className="text-sm font-medium hover:text-blue-600 transition-colors">
-                For Students
+                  Students
               </Link>
               <Link to="/login" className="text-sm font-medium px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-100 transition-colors text-center">
                 Log In
@@ -135,7 +135,7 @@ export default function Component() {
             <div className="tools-image">
   <img
     className="aspect-video rounded-xl"
-    src="/assets/istockphoto-1347520142-1024x1024.webp"
+    src="/assets/powerful-tools.webp"
     alt="MSCE PrepMaster Dashboard"
   />
 </div>

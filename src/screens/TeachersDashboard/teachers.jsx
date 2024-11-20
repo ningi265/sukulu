@@ -17,20 +17,24 @@ import { Avatar, AvatarFallback, AvatarImage } from "../../components/ui/avatar"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../components/ui/tabs"
 import { BookOpen, Users,ChevronDown,User, Video, FileText, BarChart, Bell, Plus, Settings, LogOut } from 'lucide-react'
 import { jwtDecode } from 'jwt-decode';
+import { useNavigate } from 'react-router-dom'
+import axios from 'axios';
+import Badge from '@mui/material/Badge'; 
 
 
 
 export default function TeacherDashboard() {
   const [searchQuery, setSearchQuery] = useState('')
   const [showProfileMenu, setShowProfileMenu] = useState(false);
+  const navigate = useNavigate();
 
   const sidebarLinks = [
     { href: "#dashboard", icon: BarChart, label: "Dashboard" },
     { href: "#courses", icon: BookOpen, label: "Subjects" },
     { href: "#students", icon: Users, label: "Students" },
     { href: "#live-classes", icon: Video, label: "Live Classes" },
-    { href: "#assignments", icon: FileText, label: "Assignments" },
-    { href: "#exams", icon: FileText, label: "Exams" },
+    { href: "#assessments", icon: FileText, label: "Assessments" },
+    { href: "#forums", icon: FileText, label: "forums" },
   ]
 
   const [stats, setStats] = useState([]);
@@ -39,23 +43,10 @@ export default function TeacherDashboard() {
   const [assignments, setAssignments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [userData, setUserData] = useState([]);
+  const [notificationCount, setNotificationCount] = useState(0);
 
-  const checkTokenExpiration = () => {
-    const token = localStorage.getItem('authToken');
-    if (token) {
-      const decoded = jwtDecode(token);  // Use jwtDecode here
-      const currentTime = Date.now() / 1000; // Get the current time in seconds
-      if (decoded.exp < currentTime) {
-        localStorage.removeItem('authToken');
-        window.location.href = '/login'; // Redirect to login page if token expired
-      }
-    }
-  };
-  
 
-  useEffect(() => {
-    checkTokenExpiration(); // Check token expiration on component mount
-  }, []);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -77,17 +68,85 @@ export default function TeacherDashboard() {
         setLoading(false);
       }
     };
-
+    const fetchNotifications = async () => {
+      try {
+        const token = sessionStorage.getItem('token');
+        const response = await axios.get('http://localhost:4000/api/enrollments/notification/teacher/count', {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        console.log('Notification count response:', response.data); // Log the API response
+        setNotificationCount(response.data.count);
+      } catch (error) {
+        console.error('Error fetching notifications count:', error);
+      }
+    };
     fetchData();
+    fetchNotifications();
   }, []);
 
-  const handleLogout = () => {
-    localStorage.removeItem('authToken');
-    window.location.href = '/login'; // Redirect to login page
+  const getTeacherNotifications = async (token) => {
+    try {
+      const response = await axios.get('http://localhost:4000/api/enrollments/notification/teacher', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      return response.data.notifications;
+    } catch (error) {
+      console.error('Error fetching teacher notifications:', error);
+      throw error;
+    }
+  };
+
+  const handleLogout = async () => {
+    try {
+      // Send a logout request to the server
+      const response = await fetch('http://localhost:4000/api/users/logout', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${sessionStorage.getItem('token')}`, // Use the correct key for the token
+        },
+      });
+  
+      // Check if the response is successful
+      if (!response.ok) {
+        throw new Error('Logout failed'); // Handle unsuccessful logout
+      }
+      const currentToken = sessionStorage.getItem('token');
+      console.log('Current session token before removal:', currentToken);
+  
+      sessionStorage.removeItem('token');
+
+      const removedToken = sessionStorage.getItem('token');
+    console.log('Session token after removal:', removedToken); // Should be null or undefined
+      // Clear the authentication token from storage
+      localStorage.removeItem('token'); // Ensure this matches the key used to store the token
+  
+      // Redirect to the home page
+      navigate('/'); // Use navigate from react-router-dom v6 or later
+    } catch (error) {
+      console.error('Logout failed:', error);
+      // Optionally, you can show an error message to the user
+    }
   };
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
+
+  const handleClick = () => {
+    navigate('/course'); // Navigate to the 'create-course' page
+  };
+  const handleClick1 = () => {
+    navigate('/assignment');
+  }
+  const handleClick2 = () => {
+    navigate('/course');
+  }
+  const handleBellClick = () => {
+    navigate('/notification'); // Navigate to the notifications page
+  };
+  
   return (
     <div className="flex">
       {/* Sidebar */}
@@ -123,9 +182,14 @@ export default function TeacherDashboard() {
       {/* Right-aligned Notifications and Dropdown */}
       <div className="header-right flex items-center space-x-4">
         {/* Notification Bell */}
-        <button className="text-gray-500 hover:text-gray-700">
+        <button 
+            className="text-gray-500 hover:text-gray-700 relative"
+            onClick={handleBellClick}
+          >
+            <Badge badgeContent={notificationCount} color="primary">
               <Bell className="w-6 h-6" />
-        </button>
+            </Badge>
+          </button>
         <div className="relative">
               <button 
                 className="flex items-center space-x-2 text-gray-500 hover:text-gray-700"
@@ -138,10 +202,13 @@ export default function TeacherDashboard() {
                 <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1">
                   <Link href="/profile" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Profile</Link>
                   <Link href="/settings" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Settings</Link>
-                  <button className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                    <LogOut className="w-4 h-4 inline-block mr-2" />
-                    Logout
-                  </button>
+                  <button 
+      className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+      onClick={handleLogout} // Add the onClick function here
+    >
+      <LogOut className="w-4 h-4 inline-block mr-2" />
+      Logout
+    </button>
                 </div>
               )}
             </div>
@@ -181,9 +248,13 @@ export default function TeacherDashboard() {
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                   />
-                  <Button>
-                    <Plus className="mr-2 h-4 w-4" /> Create Course
-                  </Button>
+                 <button
+      onClick={handleClick} // Place the onClick here
+      className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+    >
+      <Plus className="mr-2 h-4 w-4" /> {/* Icon */}
+      Create Course
+    </button>
                 </div>
                 <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
                   {courses
@@ -267,9 +338,13 @@ export default function TeacherDashboard() {
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                   />
-                  <Button>
-                    <Plus className="mr-2 h-4 w-4" /> Create Assignment
-                  </Button>
+                  <button
+      onClick={handleClick1} // Place the onClick here
+      className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+    >
+      <Plus className="mr-2 h-4 w-4" /> {/* Icon */}
+      Create Assignment
+    </button>
                 </div>
                 <div className="bg-white rounded-lg shadow overflow-hidden">
                   <table className="w-full">
